@@ -39,6 +39,7 @@ class EgyptHomeScreen extends StatelessWidget {
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
                   onTap: () {
@@ -278,7 +279,7 @@ class EgyptHomeScreen extends StatelessWidget {
       child: SizedBox(
         width: AppSize.s100.h,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               clipBehavior: Clip.antiAliasWithSaveLayer,
