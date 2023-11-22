@@ -303,7 +303,8 @@ class _EgyptCartScreenState extends State<EgyptCartScreen> {
                   : ColorManager.black,
             ),
             onPressed: () {
-              EgyptLayoutBloc.get(context).deleteFromDataBase(id: model["id"]);
+              EgyptLayoutBloc.get(context)
+                  .deleteFromDataBase(id: model["product_id"]);
             },
           ),
         )
