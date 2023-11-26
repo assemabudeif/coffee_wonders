@@ -290,6 +290,7 @@ class EgyptHomeScreen extends StatelessWidget {
                   image: NetworkImage(
                     image,
                   ),
+                  fit: BoxFit.cover,
                 ),
                 color: CacheHelper.getData(key: SharedKey.isDark) == true
                     ? ColorManager.primaryColor
