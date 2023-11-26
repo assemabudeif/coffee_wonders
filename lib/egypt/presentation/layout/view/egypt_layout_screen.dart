@@ -26,7 +26,7 @@ class EgyptLayoutScreen extends StatelessWidget {
             create: (context) => EgyptLayoutBloc()..createDataBase(),
           ),
           BlocProvider(
-            create: (context) => EgyptHomeBloc()..getCategories(),
+            create: (context) => EgyptHomeBloc(),
           ),
         ],
         child: BlocBuilder<EgyptLayoutBloc, EgyptLayoutStates>(

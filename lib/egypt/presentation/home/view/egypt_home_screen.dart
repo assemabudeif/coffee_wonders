@@ -31,9 +31,7 @@ class EgyptHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EgyptHomeBloc()
-        // ..getProduct()
-        ..getCategories(),
+      create: (context) => EgyptHomeBloc(),
       child: BlocBuilder<EgyptHomeBloc, EgyptHomeStates>(
         builder: (context, state) {
           return SingleChildScrollView(

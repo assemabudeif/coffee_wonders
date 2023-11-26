@@ -3,6 +3,12 @@ import 'package:coffee_wonders/app/resources/constants_manager.dart';
 class EgyptApiConstant {
   static const String baseUrl = "https://pos-api.lineerp.live/";
 
+  /// Categories Paths
+  static String getAllCategoriesPath =
+      "${AppConstants.appLanguage}/api/categories";
+  static String showCategoryBrandsPath(String categoryId) =>
+      "${AppConstants.appLanguage}/api/categories/brands/$categoryId";
+
   /// Brands Paths
   static String getAllBrandsPath = "${AppConstants.appLanguage}/api/brands";
   static String showBrandPath(String brandId) =>

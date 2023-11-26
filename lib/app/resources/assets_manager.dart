@@ -33,4 +33,5 @@ class AssetsManager {
   static const String vitaminBar = "$imagePath/vitamin_bar.png";
   static const String saudiFlag = "$imagePath/saudi.png";
   static const String egyptFlag = "$imagePath/egypt.png";
+  static const String categoryImage = "$imagePath/category.png";
 }

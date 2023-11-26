@@ -60,6 +60,11 @@ class _EgyptSearchScreenState extends State<EgyptSearchScreen> {
                     _searchController.text,
                   ),
                   builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                     if (snapshot.hasError) {
                       return const HandleErrorFromApiWidget();
                     } else if (snapshot.hasData) {

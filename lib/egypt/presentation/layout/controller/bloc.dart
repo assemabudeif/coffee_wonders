@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../../data/products/models/egypt_product_model.dart';
+import '../../categories/egypt_categories_screen.dart';
 import '/app/resources/strings_manager.dart';
 import '../../brands/view/egypt_brands_screen.dart';
 import '../../../presentation/layout/controller/states.dart';
@@ -14,13 +15,13 @@ class EgyptLayoutBloc extends Cubit<EgyptLayoutStates> {
   int index = 0;
   List<String> appBarTitle = [
     AppStrings.coffeeWonders,
-    // AppStrings.categories.tr(),
-    AppStrings.brands.tr(),
+    AppStrings.categories.tr(),
+    // AppStrings.brands.tr(),
   ];
   List<Widget> screens = [
     EgyptHomeScreen(),
-    // const EgyptCategoriesScreen(),
-    const EgyptBrandsScreen(),
+    const EgyptCategoriesScreen(),
+    // const EgyptBrandsScreen(),
   ];
   void changeBottomNavBar(int currentIndex) {
     index = currentIndex;
