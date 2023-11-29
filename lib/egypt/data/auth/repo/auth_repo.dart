@@ -1,14 +1,13 @@
-import '/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 
-import '../models/auth_model.dart';
+import '../../../../app/error/failures.dart';
+import '../models/egypt_login_model.dart';
+import '../models/egypt_register_model.dart';
 import '../params.dart';
 
-abstract class AuthRepository {
-  Future<Either<Failure, AuthModel>> login(LoginParams params);
-  Future<Either<Failure, AuthModel>> registration(RegistrationParams params);
+abstract class EgyptAuthRepository {
+  Future<Either<Failure, EgyptLoginModel>> login(LoginParams params);
+  Future<Either<Failure, EgyptRegisterModel>> registration(
+      RegistrationParams params);
   Future<Either<Failure, String>> logout();
-  Future<Either<Failure, String>> deleteClientAccount();
-
-  Future<Either<Failure, String>> updateFCMToken(String token);
 }

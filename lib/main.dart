@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,11 +14,12 @@ import 'app/services/shared_prefrences/cache_helper.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await CacheHelper.init();
   SaudiDioHelper.init();
   EgyptDioHelper.init();
-  await CacheHelper.init();
   Bloc.observer = AppBlocObserver();
   // await DBHelper.instance.createDataBase();
+  log(CacheHelper.getData(key: SharedKey.egyptToken).toString());
   runApp(
     EasyLocalization(
       supportedLocales: const [

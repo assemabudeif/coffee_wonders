@@ -1,34 +1,33 @@
 import 'dart:developer';
 
+import 'package:coffee_wonders/app/resources/strings_manager.dart';
+import 'package:coffee_wonders/egypt/data/auth/repo/auth_repo_impl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/global/assets_manager.dart';
-import '/core/common/app_snack_bars.dart';
-import '/core/services/services_locator.dart';
-import '/features/auth/data/params.dart';
-import '/features/auth/view_model/auth_bloc.dart';
+import '../../../../app/common/widget.dart';
+import '../../../../app/resources/assets_manager.dart';
+import '../../../../app/resources/color_manager.dart';
+import '../../../../app/resources/routes_manager.dart';
+import '../../../../app/resources/values_manager.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '/core/common/widget.dart';
-import '/core/global/routes_manager.dart';
-import '/core/global/theme/color_manager.dart';
-import '/core/global/values_manager.dart';
-import '/core/utilities/app_strings.dart';
-import '/features/auth/view_model/auth_event.dart';
-import '/features/auth/view_model/auth_state.dart';
+import '../../../data/auth/params.dart';
+import '../view_model/auth_bloc.dart';
+import '../view_model/auth_event.dart';
+import '../view_model/auth_state.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class EgyptLoginScreen extends StatefulWidget {
+  const EgyptLoginScreen({super.key});
 
-  State<LoginScreen> get state => _LoginScreenState();
+  State<EgyptLoginScreen> get state => _EgyptLoginScreenState();
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<EgyptLoginScreen> createState() => _EgyptLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _EgyptLoginScreenState extends State<EgyptLoginScreen> {
   late GlobalKey<FormState> _formKey;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
@@ -58,26 +57,27 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthBloc>(
-      create: (context) => sl<AuthBloc>(),
+      create: (context) => AuthBloc(EgyptAuthRepositoryImpl()),
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthLoginSuccess) {
             log('login success');
             Navigator.pushNamedAndRemoveUntil(
               context,
-              Routes.layoutRoute,
+              Routes.egyptLayoutRoute,
               (route) => false,
             );
           }
           if (state is AuthLoginFailure) {
-            AppSnackBars.showErrorSnackBar(
-              context,
-              state.message,
+            SharedWidget.toast(
+              message: state.message,
+              backgroundColor: Colors.red,
             );
           }
         },
         builder: (context, state) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               elevation: AppSize.s0,
             ),
@@ -131,10 +131,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           textInputType: TextInputType.emailAddress,
                           controller: _emailController,
                           validator: (p0) => p0!.isEmpty
-                              ? AppStrings.thisFieldIsRequired.tr()
+                              ? AppStrings.thisIsRequired.tr()
                               : null,
                           context: context,
-                          label: AppStrings.emailAddressOrPhonenumber.tr(),
+                          hint: AppStrings.email.tr(),
                         ),
                         SizedBox(
                           height:
@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SharedWidget.defaultTextFormField(
                           textInputType: TextInputType.visiblePassword,
-                          label: AppStrings.password.tr(),
+                          hint: AppStrings.password.tr(),
                           suffixIcon: IconButton(
                             onPressed: () {
                               _changePasswordVisibility();
@@ -154,11 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscure: _isPasswordVisible,
                           controller: _passwordController,
                           validator: (p0) => p0!.isEmpty
-                              ? AppStrings.thisFieldIsRequired.tr()
+                              ? AppStrings.thisIsRequired.tr()
                               : null,
                           context: context,
                         ),
-
                         SizedBox(
                           height:
                               MediaQuery.of(context).size.height / AppSize.s30,
@@ -166,15 +165,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (state is AuthLoginLoading)
                           const Center(
                             child: CircularProgressIndicator(
-                              color: ColorManager.primaryColorBlue,
+                              color: ColorManager.primaryColor,
                             ),
                           )
                         else
                           SharedWidget.defaultButton(
+                            width: MediaQuery.of(context).size.width,
+                            label: AppStrings.login.tr(),
                             context: context,
-                            function: () {
+                            onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                return sl<AuthBloc>().add(
+                                return AuthBloc(EgyptAuthRepositoryImpl()).add(
                                   AuthLoginEvent(
                                     context: context,
                                     params: LoginParams(
@@ -184,33 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               }
                             },
-                            text: AppStrings.login.tr(),
-                            backgroundColor: ColorManager.primaryColorBlue,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMedium!
-                                .copyWith(
-                                  color: ColorManager.white,
-                                ),
                           ),
-                        // SizedBox(
-                        //   height: MediaQuery.of(context).size.height / AppSize.s100,
-                        // ),
-                        // InkWell(
-                        //   onTap: () {
-                        //     Navigator.pushNamed(
-                        //       context,
-                        //       Routes.forgetPasswordRoute,
-                        //     );
-                        //   },
-                        //   child: Text(
-                        //     AppStrings.forgetPassword.tr(),
-                        //     style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        //           decoration: TextDecoration.underline,
-                        //         ),
-                        //   ),
-                        // ),
-
                         SizedBox(
                           height:
                               MediaQuery.of(context).size.height / AppSize.s30,
@@ -219,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {
                             Navigator.pushNamed(
                               context,
-                              Routes.registerRoute,
+                              Routes.egyptRegisterRoute,
                             );
                           },
                           child: Center(
@@ -227,12 +202,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               AppStrings.createAnAccount.tr(),
                               style: Theme.of(context)
                                   .textTheme
-                                  .displayMedium!
+                                  .bodyMedium!
                                   .copyWith(
-                                    color: ColorManager.primaryColorBlue,
+                                    color: ColorManager.primaryColor,
                                     decoration: TextDecoration.underline,
-                                    decorationColor: ColorManager
-                                        .primaryColorBlue
+                                    fontWeight: FontWeight.bold,
+                                    decorationColor: ColorManager.primaryColor
                                         .withAlpha(255),
                                   ),
                             ),

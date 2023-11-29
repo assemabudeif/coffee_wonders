@@ -88,5 +88,10 @@
       "saudi": "Saudi Arabia",
       "egypt": "Egypt",
       "empty" : "Empty",
-      "failedToLoadData": "Failed to load data, please try again later" 
+      "failedToLoadData": "Failed to load data, please try again later" ,
+      "password": "Password",
+      "loginDetails": "Login Details",
+      "confirmPassword": "Confirm Password",
+      "signUp" : "Sign Up",
+      "logout": "Logout"
 }

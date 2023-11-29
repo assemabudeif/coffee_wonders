@@ -1,4 +1,5 @@
 import 'package:coffee_wonders/app/resources/strings_manager.dart';
+import 'package:coffee_wonders/app/services/shared_prefrences/cache_helper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,11 +55,19 @@ class _ChooseCountryScreenState extends State<ChooseCountryScreen> {
             ),
             InkWell(
               onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const EgyptLayoutScreen()),
-                  (route) => false,
-                );
+                if (CacheHelper.getData(key: SharedKey.egyptToken) != null) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    Routes.egyptLayoutRoute,
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    Routes.egyptLoginRoute,
+                    (route) => false,
+                  );
+                }
               },
               child: Column(
                 children: [

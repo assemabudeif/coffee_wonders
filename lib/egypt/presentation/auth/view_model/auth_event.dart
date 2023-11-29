@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../data/params.dart';
+import '../../../data/auth/params.dart';
 
 abstract class AuthEvent extends Equatable {
   const AuthEvent();

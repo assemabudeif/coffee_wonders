@@ -1,3 +1,5 @@
+import 'package:coffee_wonders/app/resources/constants_manager.dart';
+import 'package:coffee_wonders/app/services/shared_prefrences/cache_helper.dart';
 import 'package:coffee_wonders/global/choose_country/choose_country_screen.dart';
 
 import '/global/splash_screen/controller/bloc.dart';
@@ -10,8 +12,20 @@ import '../../../app/resources/assets_manager.dart';
 import '../../../app/resources/color_manager.dart';
 import '../../../app/resources/values_manager.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    AppConstants.egyptToken =
+        CacheHelper.getData(key: SharedKey.egyptToken) ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

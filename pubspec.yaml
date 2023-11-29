@@ -28,6 +28,8 @@ dependencies:
   expandable: ^5.0.1
   rename: ^3.0.1
   flutter_launcher_icons: ^0.13.1
+  equatable: ^2.0.5
+  dartz: ^0.10.1
 
 flutter_launcher_icons:
     android: true

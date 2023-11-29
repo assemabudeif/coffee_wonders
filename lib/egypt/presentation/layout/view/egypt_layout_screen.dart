@@ -1,7 +1,12 @@
+import 'package:coffee_wonders/app/resources/constants_manager.dart';
+import 'package:coffee_wonders/egypt/data/auth/repo/auth_repo.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../app/common/widget.dart';
+import '../../../data/auth/repo/auth_repo_impl.dart';
 import '/app/common/function.dart';
 import '/app/resources/color_manager.dart';
 import '/app/resources/font_manager.dart';
@@ -154,10 +159,40 @@ class EgyptLayoutScreen extends StatelessWidget {
                     ? AppStrings.lightMode.tr()
                     : AppStrings.darkMode.tr(),
               ),
+              if (CacheHelper.getData(key: SharedKey.egyptToken) != null)
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / AppSize.s40,
+                ),
+              if (CacheHelper.getData(key: SharedKey.egyptToken) != null)
+                drawerListItem(
+                  context: context,
+                  onTap: () async {
+                    await _logout(context);
+                  },
+                  icon: Icons.logout,
+                  text: AppStrings.logout.tr(),
+                ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    final result = await EgyptAuthRepositoryImpl().logout();
+    result.fold(
+      (l) {
+        SharedWidget.toast(
+          message: l.message,
+          backgroundColor: Colors.red,
+        );
+      },
+      (r) {
+        AppConstants.egyptToken = '';
+        CacheHelper.removeData(key: SharedKey.egyptToken);
+        Phoenix.rebirth(context);
+      },
     );
   }
 

@@ -44,5 +44,6 @@ enum SharedKey {
   Language,
   isDark,
   token,
+  egyptToken,
   cartList,
 }

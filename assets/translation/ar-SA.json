@@ -88,5 +88,10 @@
     "saudi": "السعودية",
     "egypt": "مصر",
     "empty":    "لا يوجد",
-    "failedToLoadData": "فشل في تحميل البيانات, حاول مرة اخري"
+    "failedToLoadData": "فشل في تحميل البيانات, حاول مرة اخري",
+    "password": "كلمة المرور",
+    "loginDetails": "تفاصيل الدخول",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "signUp" : "تسجيل",
+    "logout": "تسجيل الخروج"
 }

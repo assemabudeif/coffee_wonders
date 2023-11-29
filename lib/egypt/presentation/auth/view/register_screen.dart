@@ -1,35 +1,31 @@
-import '../../../core/global/assets_manager.dart';
-import '/core/global/routes_manager.dart';
-import '/features/auth/data/params.dart';
-import '/features/auth/view_model/auth_bloc.dart';
+import 'package:coffee_wonders/app/common/widget.dart';
+import 'package:coffee_wonders/egypt/data/auth/repo/auth_repo_impl.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/common/app_snack_bars.dart';
-import '../../../core/common/widget.dart';
-import '../../../core/global/theme/color_manager.dart';
-import '../../../core/global/values_manager.dart';
-import '../../../core/services/services_locator.dart';
-import '../../../core/utilities/app_strings.dart';
+import '../../../../app/resources/assets_manager.dart';
+import '../../../../app/resources/color_manager.dart';
+import '../../../../app/resources/routes_manager.dart';
+import '../../../../app/resources/strings_manager.dart';
+import '../../../../app/resources/values_manager.dart';
+import '../../../data/auth/params.dart';
+import '../view_model/auth_bloc.dart';
 import '../view_model/auth_event.dart';
 import '../view_model/auth_state.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class EgyptRegisterScreen extends StatefulWidget {
+  const EgyptRegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<EgyptRegisterScreen> createState() => _EgyptRegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _EgyptRegisterScreenState extends State<EgyptRegisterScreen> {
   late GlobalKey<FormState> _formKey;
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
-  late TextEditingController _phoneNumberController;
-  late TextEditingController _addressController;
 
   bool _isPasswordVisible = true;
   bool _isConfirmPasswordVisible = true;
@@ -50,11 +46,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     _formKey = GlobalKey<FormState>();
     _nameController = TextEditingController();
-    _addressController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
-    _phoneNumberController = TextEditingController();
 
     super.initState();
   }
@@ -62,11 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    _addressController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _phoneNumberController.dispose();
 
     super.dispose();
   }
@@ -74,30 +66,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthBloc>(
-      create: (context) => sl<AuthBloc>(),
+      create: (context) => AuthBloc(EgyptAuthRepositoryImpl()),
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthRegisterSuccess) {
             Navigator.of(context).pushNamedAndRemoveUntil(
-              Routes.loginRoute,
+              Routes.egyptLoginRoute,
               (_) => false,
             );
           }
 
           if (state is AuthRegisterFailure) {
-            AppSnackBars.showErrorSnackBar(
-              context,
-              state.message,
+            SharedWidget.toast(
+              message: state.message,
+              backgroundColor: Colors.red,
             );
           }
         },
         builder: (context, state) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               elevation: AppSize.s0,
               title: Text(
-                AppStrings.createAnAccount.tr(),
-                style: Theme.of(context).textTheme.displayLarge,
+                AppStrings.createAnAccount.tr().replaceAll('?', ''),
               ),
             ),
             body: Stack(
@@ -137,12 +129,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 AppSize.s20,
                           ),
                           SharedWidget.defaultTextFormField(
-                            label: AppStrings.name.tr(),
+                            hint: AppStrings.name.tr(),
                             textInputType: TextInputType.text,
                             context: context,
                             controller: _nameController,
                             validator: (p0) => p0!.isEmpty
-                                ? AppStrings.thisFieldIsRequired.tr()
+                                ? AppStrings.thisIsRequired.tr()
                                 : null,
                           ),
                           SizedBox(
@@ -150,12 +142,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 AppSize.s60,
                           ),
                           SharedWidget.defaultTextFormField(
-                            label: AppStrings.email.tr(),
+                            hint: AppStrings.email.tr(),
                             textInputType: TextInputType.emailAddress,
                             context: context,
                             controller: _emailController,
                             validator: (p0) => p0!.isEmpty
-                                ? AppStrings.thisFieldIsRequired.tr()
+                                ? AppStrings.thisIsRequired.tr()
                                 : null,
                           ),
                           SizedBox(
@@ -163,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 AppSize.s60,
                           ),
                           SharedWidget.defaultTextFormField(
-                            label: AppStrings.password.tr(),
+                            hint: AppStrings.password.tr(),
                             textInputType: TextInputType.visiblePassword,
                             context: context,
                             suffixIcon: IconButton(
@@ -177,7 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             obscure: _isPasswordVisible,
                             controller: _passwordController,
                             validator: (p0) => p0!.isEmpty
-                                ? AppStrings.thisFieldIsRequired.tr()
+                                ? AppStrings.thisIsRequired.tr()
                                 : null,
                           ),
                           SizedBox(
@@ -185,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 AppSize.s60,
                           ),
                           SharedWidget.defaultTextFormField(
-                            label: AppStrings.confirmPassword.tr(),
+                            hint: AppStrings.confirmPassword.tr(),
                             textInputType: TextInputType.visiblePassword,
                             context: context,
                             suffixIcon: IconButton(
@@ -199,33 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             obscure: _isConfirmPasswordVisible,
                             controller: _confirmPasswordController,
                             validator: (p0) => p0!.isEmpty
-                                ? AppStrings.thisFieldIsRequired.tr()
-                                : null,
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height /
-                                AppSize.s60,
-                          ),
-                          SharedWidget.defaultTextFormField(
-                            label: AppStrings.phoneNumber.tr(),
-                            textInputType: TextInputType.number,
-                            context: context,
-                            controller: _phoneNumberController,
-                            validator: (p0) => p0!.isEmpty
-                                ? AppStrings.thisFieldIsRequired.tr()
-                                : null,
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height /
-                                AppSize.s60,
-                          ),
-                          SharedWidget.defaultTextFormField(
-                            label: AppStrings.address.tr(),
-                            textInputType: TextInputType.streetAddress,
-                            context: context,
-                            controller: _addressController,
-                            validator: (p0) => p0!.isEmpty
-                                ? AppStrings.thisFieldIsRequired.tr()
+                                ? AppStrings.thisIsRequired.tr()
                                 : null,
                           ),
                           SizedBox(
@@ -235,15 +201,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (state is AuthRegisterLoading)
                             const Center(
                               child: CircularProgressIndicator(
-                                color: ColorManager.primaryColorBlue,
+                                color: ColorManager.primaryColor,
                               ),
                             )
                           else
                             SharedWidget.defaultButton(
                               context: context,
-                              function: () {
+                              onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  sl<AuthBloc>().add(
+                                  AuthBloc(EgyptAuthRepositoryImpl()).add(
                                     AuthRegisterEvent(
                                       context: context,
                                       params: RegistrationParams(
@@ -252,20 +218,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         password: _passwordController.text,
                                         passwordConfirmation:
                                             _confirmPasswordController.text,
-                                        phone: _phoneNumberController.text,
                                       ),
                                     ),
                                   );
                                 }
                               },
-                              text: AppStrings.signUp.tr(),
-                              backgroundColor: ColorManager.primaryColorBlue,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displayMedium!
-                                  .copyWith(
-                                    color: ColorManager.white,
-                                  ),
+                              label: AppStrings.signUp.tr(),
+                              width: MediaQuery.of(context).size.width,
                             ),
                           SizedBox(
                             height: MediaQuery.of(context).size.height /

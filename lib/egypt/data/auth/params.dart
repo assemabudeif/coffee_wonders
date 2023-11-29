@@ -26,14 +26,12 @@ class RegistrationParams extends Equatable {
   final String email;
   final String password;
   final String passwordConfirmation;
-  final String phone;
 
   const RegistrationParams({
     required this.name,
     required this.email,
     required this.password,
     required this.passwordConfirmation,
-    required this.phone,
   });
 
   Map<String, dynamic> toJson() => {
@@ -41,7 +39,6 @@ class RegistrationParams extends Equatable {
         'email': email,
         'password': password,
         'password_confirmation': passwordConfirmation,
-        'phone': phone,
       };
 
   @override
@@ -50,6 +47,5 @@ class RegistrationParams extends Equatable {
         email,
         password,
         passwordConfirmation,
-        phone,
       ];
 }

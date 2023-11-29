@@ -1,30 +1,29 @@
+import 'package:coffee_wonders/app/constant/egypt_api_constant.dart';
+import 'package:coffee_wonders/app/resources/constants_manager.dart';
+import 'package:coffee_wonders/app/services/dio_helper/egypt_dio_helper.dart';
+import 'package:coffee_wonders/app/services/shared_prefrences/cache_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:dartz/dartz.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '/core/services/services_locator.dart';
-import '/core/services/shared_preferences/shared_key.dart';
-import '/core/utilities/app_constance.dart';
-import '/core/error/failures.dart';
-import '/features/auth/data/models/auth_model.dart';
-import '/features/auth/data/params.dart';
-import '/core/network/api_constant.dart';
-import '/core/services/dio_helper/dio_helper.dart';
+import '../../../../app/error/failures.dart';
+import '../models/egypt_login_model.dart';
+import '../models/egypt_register_model.dart';
+import '../params.dart';
 import 'auth_repo.dart';
 
-class AuthRepositoryImpl extends AuthRepository {
+class EgyptAuthRepositoryImpl extends EgyptAuthRepository {
   @override
-  Future<Either<Failure, AuthModel>> registration(
+  Future<Either<Failure, EgyptRegisterModel>> registration(
       RegistrationParams params) async {
     try {
-      final response = await sl<DioHelper>().postData(
-        path: ApiConstant.registerPath,
+      final response = await EgyptDioHelper.postData(
+        path: EgyptApiConstant.registerPath,
         data: params.toJson(),
       );
 
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           response.data["status"] == "success") {
-        return Right(AuthModel.fromJson(response.data));
+        return Right(EgyptRegisterModel.fromJson(response.data));
       } else {
         return Left(ServerFailure(response.data['message']));
       }
@@ -34,16 +33,16 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AuthModel>> login(LoginParams params) async {
+  Future<Either<Failure, EgyptLoginModel>> login(LoginParams params) async {
     try {
-      final response = await sl<DioHelper>().postData(
-        path: ApiConstant.loginPath,
+      final response = await EgyptDioHelper.postData(
+        path: EgyptApiConstant.loginPath,
         data: params.toJson(),
       );
 
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           response.data["status"] == "success") {
-        return Right(AuthModel.fromJson(response.data));
+        return Right(EgyptLoginModel.fromJson(response.data));
       } else {
         return Left(ServerFailure(response.data['message']));
       }
@@ -55,8 +54,8 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<Failure, String>> logout() async {
     try {
-      final response = await sl<DioHelper>().getData(
-        path: ApiConstant.logoutPath,
+      final response = await EgyptDioHelper.getData(
+        path: EgyptApiConstant.logoutPath,
       );
 
       if ((response.statusCode == 200 || response.statusCode == 201)) {
@@ -77,59 +76,9 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, String>> deleteClientAccount() async {
-    try {
-      final response = await sl<DioHelper>().delData(
-        path: ApiConstant.deleteClientAccountPath,
-      );
-
-      if ((response.statusCode == 200 || response.statusCode == 201) &&
-          response.data["status"] == "success") {
-        _removeTokenFromSharedPref();
-        return const Right('Deleted Account Successfully');
-      } else {
-        if (response.data['message'] == "Unauthenticated.") {
-          _removeTokenFromSharedPref();
-        }
-        return Left(ServerFailure(response.data['message']));
-      }
-    } on DioException catch (e) {
-      if (e.response!.data['message'] == "Unauthenticated.") {
-        _removeTokenFromSharedPref();
-      }
-      return Left(ServerFailure(e.response!.data['message']));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> updateFCMToken(String token) async {
-    try {
-      final response = await sl<DioHelper>().postData(
-        path: ApiConstant.updateFCMTokenPath,
-        data: {
-          "fcm_token": token,
-        },
-      );
-
-      if ((response.statusCode == 200 || response.statusCode == 201) &&
-          response.data["status"] == "success") {
-        return const Right('FCM Token Updated Successfully');
-      } else {
-        return Left(ServerFailure(response.data?['message'] ?? 'Error'));
-      }
-    } on DioException catch (e) {
-      return Left(ServerFailure(e.response?.data['message'] ?? 'Error'));
-    }
-  }
-
   _removeTokenFromSharedPref() async {
-    ApiConstant.token = '';
-    ApiConstant.clientId = '';
-    AppConstants.profileName = '';
+    AppConstants.egyptToken = '';
 
-    await sl<SharedPreferences>().remove(SharedKey.profileName.name);
-    await sl<SharedPreferences>().remove(SharedKey.token.name);
-    await sl<SharedPreferences>().remove(SharedKey.clientId.name);
+    await CacheHelper.removeData(key: SharedKey.egyptToken);
   }
 }

@@ -94,4 +94,14 @@ class AppStrings {
   static String egypt = 'egypt';
   static String empty = 'empty';
   static String failedToLoadData = 'failedToLoadData';
+
+  static String password = "password";
+
+  static String loginDetails = "loginDetails";
+
+  static String confirmPassword = "confirmPassword";
+
+  static String signUp = "signUp";
+
+  static String logout = "logout";
 }

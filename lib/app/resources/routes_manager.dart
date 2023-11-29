@@ -1,5 +1,7 @@
 import 'package:coffee_wonders/egypt/presentation/cart/view/egypt_cart_screen.dart';
 
+import '../../egypt/presentation/auth/view/login_screen.dart';
+import '../../egypt/presentation/auth/view/register_screen.dart';
 import '../../egypt/presentation/layout/view/egypt_layout_screen.dart';
 import '../../saudi/presentation/about_us/view/abou_us_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -19,6 +21,9 @@ class Routes {
   static const String egyptLayoutRoute = "/egyptLayoutRoute";
   static const String egyptCheckoutRoute = "/egyptCheckoutRoute";
   static const String egyptCartRoute = "/egyptCartRoute";
+
+  static const String egyptLoginRoute = "/egyptLoginRoute";
+  static const String egyptRegisterRoute = "/egyptRegisterRoute";
 }
 
 class RouteGenerator {
@@ -50,6 +55,14 @@ class RouteGenerator {
       case Routes.egyptCartRoute:
         return MaterialPageRoute(
           builder: (_) => const EgyptCartScreen(),
+        );
+      case Routes.egyptRegisterRoute:
+        return MaterialPageRoute(
+          builder: (_) => const EgyptRegisterScreen(),
+        );
+      case Routes.egyptLoginRoute:
+        return MaterialPageRoute(
+          builder: (_) => const EgyptLoginScreen(),
         );
 
       default:

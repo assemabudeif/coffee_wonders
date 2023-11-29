@@ -1,24 +1,25 @@
 import 'package:equatable/equatable.dart';
 
-class EgyptAuthModel extends Equatable {
+class EgyptRegisterModel extends Equatable {
   final String status;
   final Data data;
 
-  const EgyptAuthModel({
+  const EgyptRegisterModel({
     required this.status,
     required this.data,
   });
 
-  EgyptAuthModel copyWith({
+  EgyptRegisterModel copyWith({
     String? status,
     Data? data,
   }) =>
-      EgyptAuthModel(
+      EgyptRegisterModel(
         status: status ?? this.status,
         data: data ?? this.data,
       );
 
-  factory EgyptAuthModel.fromJson(Map<String, dynamic> json) => EgyptAuthModel(
+  factory EgyptRegisterModel.fromJson(Map<String, dynamic> json) =>
+      EgyptRegisterModel(
         status: json["status"],
         data: Data.fromJson(json["data"]),
       );

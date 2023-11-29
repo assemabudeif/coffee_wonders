@@ -6,8 +6,18 @@ class EgyptApiConstant {
   /// Categories Paths
   static String getAllCategoriesPath =
       "${AppConstants.appLanguage}/api/categories";
+
   static String showCategoryBrandsPath(String categoryId) =>
       "${AppConstants.appLanguage}/api/categories/brands/$categoryId";
+
+  /// Auth Paths
+  static String registerPath =
+      '${AppConstants.appLanguage}/api/auth/client/register';
+  static String loginPath = '${AppConstants.appLanguage}/api/auth/client/login';
+  static String logoutPath =
+      '${AppConstants.appLanguage}/api/auth/client/logout';
+  static String profilePath =
+      '${AppConstants.appLanguage}/pi/auth/client/profile';
 
   /// Brands Paths
   static String getAllBrandsPath = "${AppConstants.appLanguage}/api/brands";
